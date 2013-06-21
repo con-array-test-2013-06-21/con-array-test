@@ -85,7 +85,7 @@ def create_agent(agent_name, addr_info_list):
                     header_time = curr_time
                 
                 if curr_time > header_time + HEADER_DELAY:
-                    buf = buf + create_header() + b'\r\r'
+                    buf = buf + create_header() + b'\r\n'
                     header_time = curr_time
                 
                 buf_sent = sock.send(buf)

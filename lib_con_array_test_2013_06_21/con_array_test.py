@@ -32,20 +32,30 @@ def create_agent(addr_info_list, agent_name):
             
             addr_info = random.choice(addr_info_list)
             
-            # TODO создать нужной фамилии socket
-            # sock = ....
+            sock = socket.socket(addr_info[0], addr_info[1], addr_info[2])
             
-            # TODO и не забыть про setblocking(0),
-            #           и про keepalive -- ПЕРЕД подключением
+            sock.setblocking(False)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
             
+            is_connected = False
             begin_con_time = time.time()
             
-            # TODO ...подключиться
+            try:
+                sock.connect(addr_info[3], addr_info[4])
+            except BlockingIOError:
+                pass
+            else:
+                is_connected = True
             
             yield 'new_con'
             
-            while True:
-                if ...connected...:
+            while not is_connected:
+                try:
+                    sock.connect(addr_info[3], addr_info[4]):
+                except BlockingIOError:
+                    pass
+                else:
+                    is_connected = True
                     break
                 
                 curr_time = time.time()
@@ -89,7 +99,7 @@ def print_status(status_ctx):
     print(text)
 
 def con_array_test(hostname, con_count, delay):
-    # TODO addr_info_list = ...
+    addr_info_list = socket.getaddrinfo(hostname, 80, proto=socket.SOL_TCP)
     
     agent_list = tuple(
             create_agent('agent_{}'.format(con_i), addr_info_list)

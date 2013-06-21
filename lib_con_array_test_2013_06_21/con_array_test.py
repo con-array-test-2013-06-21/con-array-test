@@ -27,6 +27,8 @@ class StatusCtx:
 
 def create_agent(agent_name, addr_info_list):
     while True:
+        sock = None
+        
         try:
             if not addr_info_list:
                 raise OSError
@@ -72,10 +74,14 @@ def create_agent(agent_name, addr_info_list):
             while True:
                 # TODO ... делаем дело
                 
-                # TODO если ошибка то ---- sock.close(); raise OSError
+                # TODO если ошибка то ---- raise OSError
                 
                 yield 'work'
         except OSError:
+            if sock is not None:
+                sock.close()
+                sock = None
+            
             yield 'error'
 
 def print_status(status_ctx):

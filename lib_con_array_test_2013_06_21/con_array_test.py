@@ -21,9 +21,13 @@ import socket, time, random
 
 CONNECT_PORT = 80
 CONNECT_TIMEOUT = 300.0
+HEADER_DELAY = 1.0
 
 class StatusCtx:
     pass
+
+def create_header():
+    return b'X-Some-Header: some-value'
 
 def create_agent(agent_name, addr_info_list):
     while True:
@@ -71,16 +75,26 @@ def create_agent(agent_name, addr_info_list):
                 
                 yield 'contin_con'
             
+            buf = b'GET / HTTP/1.1\r\n'
+            header_time = time.time()
+            
             while True:
-                # TODO ... делаем дело
+                curr_time = time.time()
                 
-                # TODO если ошибка то ---- raise OSError
+                if curr_time < header_time:
+                    header_time = curr_time
+                
+                if curr_time > header_time + HEADER_DELAY:
+                    buf = buf + create_header() + b'\r\r'
+                    header_time = curr_time
+                
+                buf_sent = sock.send(buf)
+                buf = buf[buf_sent:]
                 
                 yield 'work'
         except OSError:
             if sock is not None:
                 sock.close()
-                sock = None
             
             yield 'error'
 

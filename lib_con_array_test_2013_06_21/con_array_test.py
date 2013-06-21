@@ -25,7 +25,7 @@ CONNECT_TIMEOUT = 300.0
 class StatusCtx:
     pass
 
-def create_agent(addr_info_list, agent_name):
+def create_agent(agent_name, addr_info_list):
     while True:
         try:
             if not addr_info_list:

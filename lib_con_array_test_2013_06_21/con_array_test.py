@@ -19,6 +19,7 @@ assert str is not bytes
 
 import socket, time, random
 
+CONNECT_PORT = 80
 CONNECT_TIMEOUT = 300.0
 
 class StatusCtx:
@@ -31,7 +32,6 @@ def create_agent(addr_info_list, agent_name):
                 raise OSError
             
             addr_info = random.choice(addr_info_list)
-            
             sock = socket.socket(addr_info[0], addr_info[1], addr_info[2])
             
             sock.setblocking(False)
@@ -99,7 +99,11 @@ def print_status(status_ctx):
     print(text)
 
 def con_array_test(hostname, con_count, delay):
-    addr_info_list = socket.getaddrinfo(hostname, 80, proto=socket.SOL_TCP)
+    addr_info_list = socket.getaddrinfo(
+            hostname,
+            CONNECT_PORT,
+            proto=socket.SOL_TCP,
+            )
     
     agent_list = tuple(
             create_agent('agent_{}'.format(con_i), addr_info_list)

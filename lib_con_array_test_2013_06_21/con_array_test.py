@@ -53,7 +53,7 @@ def create_agent(agent_name, addr_info_list):
             
             while not is_connected:
                 try:
-                    sock.connect(addr_info[3], addr_info[4]):
+                    sock.connect(addr_info[3], addr_info[4])
                 except BlockingIOError:
                     pass
                 else:

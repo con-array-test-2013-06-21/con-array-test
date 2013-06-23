@@ -8,7 +8,7 @@ in situation with big array of connections.
 Status
 ------
 
-Developer branch version.
+Beta branch version.
 
 
 Example of using
